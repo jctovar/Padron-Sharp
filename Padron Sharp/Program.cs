@@ -16,6 +16,7 @@ namespace Pruebas1
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+            Application.Run(new Padron.Splash());
             Application.Run(new Form1());
         }
     }
