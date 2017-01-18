@@ -34,65 +34,11 @@ namespace Pruebas1
             this.Close();
         }
 
-        private void loadData()
-        {
-            Padron.MyDataBase mydatabase = new Padron.MyDataBase();
-            MySqlConnection conn = null;
-            MySqlCommand cmd = null;
-            MySqlDataReader reader = null;
-
-            string sql = "SELECT * FROM alumnos_suayed WHERE ch_alumno_num_cta = ?username";
-
-            try
-            {
-                conn = mydatabase.GetConnection();
-                cmd = new MySqlCommand(sql, conn);
-                cmd.Parameters.Add(new MySqlParameter("username", textBox1.Text));
-
-                conn.Open();
-
-                reader = cmd.ExecuteReader();
-
-                if (reader.HasRows)
-                {
-                    while (reader.Read())
-                    {
-                        textBox2.Text = reader.GetString("ch_persona_nombre");
-                        textBox3.Text = reader.GetString("ch_persona_appaterno") + " " + reader.GetString("ch_persona_apmaterno");
-                        textBox4.Text = reader.GetString("ch_persona_email");
-                        textBox5.Text = reader.GetString("ch_dependencia_nombre");
-                        textBox6.Text = reader.GetString("nu_alumno_ingreso");
-                        textBox7.Text = reader.GetString("ch_plan_cve");
-                        textBox8.Text = reader.GetString("ch_persona_curp");
-                        textBox9.Text = reader.GetString("ch_persona_telefono");
-                        //lblSurfaceArea.Text = string.Format("{0:0.00}", reader.GetFloat("surfacearea"));
-                    }
-                }
-                else
-                {
-
-                    MessageBox.Show("No se encontro la cuenta!", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(string.Format("An error occurred {0}", ex.Message), Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            finally
-            {
-                if (reader != null) reader.Close();
-                if (conn != null) conn.Close();
-                textBox1.Select();
-                textBox1.SelectionStart = 0;
-                textBox1.SelectionLength = textBox1.Text.Length;
-            }
-        }
-
         private void button1_Click(object sender, EventArgs e)
         {
             if (textBox1.Text != "" && textBox1.Text.Length == 9)
             {
-                loadData();
+                loadStudent();
             }
             else
             {
@@ -165,6 +111,43 @@ namespace Pruebas1
         {
             Padron.Form3 Test1 = new Padron.Form3();
             Test1.ShowDialog();
+        }
+
+        private void loadStudent()
+        {
+            Padron.Object_Classes.Student student = new Padron.Object_Classes.Student();
+            Padron.Database_Classes.StudentDB studentDB = new Padron.Database_Classes.StudentDB();
+
+            try
+            {
+                student = studentDB.GetStudent(textBox1.Text);
+                if (student != null)
+                {
+                    textBox2.Text = student.Firstname;
+                    textBox3.Text = student.Lastname;
+                    textBox4.Text = student.Email;
+                    textBox5.Text = student.Headquarters;
+                    textBox6.Text = student.Generation;
+                    textBox7.Text = student.Field;
+                    textBox8.Text = student.Curp;
+                    textBox9.Text = student.Phone;
+                }
+                else
+                {
+                    MessageBox.Show("No se encontro la cuenta!", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(string.Format("An error occurred {0}", ex.Message), Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                textBox1.Select();
+                textBox1.SelectionStart = 0;
+                textBox1.SelectionLength = textBox1.Text.Length;
+            }
+
         }
     }
 }

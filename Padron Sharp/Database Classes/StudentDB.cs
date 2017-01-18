@@ -44,6 +44,10 @@ namespace Padron.Database_Classes
                         //lblSurfaceArea.Text = string.Format("{0:0.00}", reader.GetFloat("surfacearea"));
                     }
                 }
+                else
+                {
+                    student = null;
+                }
             }
             catch (Exception ex)
             {
